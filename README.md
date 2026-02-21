@@ -2,9 +2,9 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2509.26287-b31b1b.svg)](https://arxiv.org/abs/2509.26287)
 [![OpenReview](https://img.shields.io/badge/OpenReview-ICLR_2026-blue.svg)](https://openreview.net/forum?id=QGd34p02mI)
 
-This GitHub repository contains the code for our ICLR 2026 Flower [paper](https://openreview.net/forum?id=QGd34p02mI), a method that aims to solve inverse problems with pretrained flow matching models through a Bayesian viewpoint.
+This GitHub repository contains the code for our ICLR 2026 FLOWER [paper](https://openreview.net/forum?id=QGd34p02mI), a method that aims to solve inverse problems with pretrained flow matching models through a Bayesian viewpoint.
 
-Flower consists of three main steps. 
+FLOWER consists of three main steps. 
 - Destination Estimation 
 - Destination Refinement
 - Time Progression 
@@ -13,7 +13,7 @@ which jointly solve linear inverse problems.
 
 <img src="flower_demo/flower_steps.png" scale=0.8/>
 
-A visual example for the solution path of FLower for box inpainting:
+A visual example for the solution path of FLOWER for box inpainting:
 
 <img src="flower_demo/batch001_grid.png" scale=0.6/>
 
@@ -26,9 +26,9 @@ conda env create -f environment.yml
 conda activate flower
 ```
 
-This will install all dependencies and the package in editable mode. The environment uses Python 3.12.2 with PyTorch installed via conda (CUDA 12.4 by default — edit `environment.yml` to match your CUDA version, or replace `pytorch-cuda=12.4` with `cpuonly` for a CPU-only up).
+This will install all dependencies and the package in editable mode. The environment uses Python 3.12.2 with PyTorch installed via conda (CUDA 12.4 by default — edit `environment.yml` to match your CUDA version, or replace `pytorch-cuda=12.4` with `cpuonly` for a CPU-only setup).
 
-### 1.1. Download datas
+### 1.1. Download data
 
 To download the [CelebA](https://www.kaggle.com/datas/jessicali9530/celeba-data) and [AFHQ-Cat](https://github.com/clovaai/stargan-v2/blob/master/README.md#animal-faces-hq-data-afhq) datas, run the command:
 ```bash
