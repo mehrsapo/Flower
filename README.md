@@ -35,17 +35,14 @@ To download all the pretrained model weights, run the command:
 bash download_models.sh
 ```
 
-## 3. Solving inverse problems
+## 3. Reproduction of paper results for solving inverse problems
+Use the bash files in the ```scripts/``` folder.
 
-The available inverse problems are:
-- Denoising --> set ```problem: 'denoising'```
-- Gaussian deblurring --> set ```problem: 'gaussian_deblurring'```
-- Super-resolution --> set ```problem: 'superresolution'```
-- Box inpainting --> set ```problem: 'inpainting'```
-- Random inpainting --> set ```problem: 'random_inpainting'```
+Visual and numerical results will be saved in ```results/``` folder. 
 
 The available methods are
-- ```flower``` (our method)
+- ```flower``` (our method default with $\gamma = 0$)
+- ```flower_cov``` (our method with $\gamma = 1$)
 - ```pnp_flow``` (from this [paper](https://arxiv.org/pdf/2402.14017))
 - ```ot_ode``` (from this [paper](https://openreview.net/forum?id=PLIt3a4yTm&referrer=%5Bthe%20profile%20of%20Ashwini%20Pokle%5D(%2Fprofile%3Fid%3D~Ashwini_Pokle1)))
 - ```d_flow``` (from this [paper](https://arxiv.org/pdf/2402.14017))
@@ -53,12 +50,14 @@ The available methods are
 - ```pnp_diff``` (from this [paper](https://openaccess.thecvf.com/content/CVPR2023W/NTIRE/papers/Zhu_Denoising_Diffusion_Models_for_Plug-and-Play_Image_Restoration_CVPRW_2023_paper.pdf))
 - ```pnp_gs``` (from this [paper](https://openreview.net/pdf?id=fPhKeld3Okz))
 
+Note ```flower``` and  ```flower_cov``` support two modes for the pretrained flow model: 1.  ```ot```: with optimal transport coupling (used for comparisons) and  ```flow_indp``` which is with no optimal transport coupling in training. Read the paper for more details
 
-### 3.2. Reproduction of paper results
-
-Use the bash files ```scripts/```.
-
-Visual results will be saved in ```results/``` folder. 
+The available inverse problems are:
+- Denoising --> set ```problem: 'denoising'```
+- Gaussian deblurring --> set ```problem: 'gaussian_deblurring'```
+- Super-resolution --> set ```problem: 'superresolution'```
+- Box inpainting --> set ```problem: 'inpainting'```
+- Random inpainting --> set ```problem: 'random_inpainting'```
 
 ## Acknowledgements
 This repository builds upon the following publicly available codes:
