@@ -9,7 +9,7 @@ Flower consists of three main steps.
 
 
 <img src="flower_demo/flower_steps.png" scale=0.8/>
-<img src="flower_demo/batch001_grid.png" scale=0.8/>
+<img src="flower_demo/batch001_grid.png" scale=0.7/>
 
 ## 1. Getting started
 To get started, clone and install the repository with 
@@ -94,9 +94,9 @@ The available methods are
 
 ### 3.2. Evaluation on the test set
 
-Use the bash file ```scripts/script_test.sh```.
+Use the bash files ```scripts/``.
 
-Visual results will be saved in ```results``` folder. 
+Visual results will be saved in ```results/``` folder. 
 
 ## Acknowledgements
 This repository builds upon the following publicly available codes:
