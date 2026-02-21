@@ -7,11 +7,12 @@ Flower consists of three main steps.
 - Destination Refinement
 - Time Progression 
 
+
 <img src="flower_demo/flower_steps.png" scale=0.8/>
 <img src="flower_demo/batch001_grid.png" scale=0.8/>
 
 ## 1. Getting started
-To get started, clone the repository and install ```pnpflow``` via pip
+To get started, clone and install the repository with 
 
 ```
 cd Flower
@@ -82,7 +83,7 @@ The available inverse problems are:
 The parameters of the inverse problems (e.g., noise level) can be adjusted manually in the ```main.py``` file.
 
 The available methods are
-- ```pnp_flow``` (our method)
+- ```pnp_flow``` 
 - ```ot_ode``` (from this [paper](https://openreview.net/forum?id=PLIt3a4yTm&referrer=%5Bthe%20profile%20of%20Ashwini%20Pokle%5D(%2Fprofile%3Fid%3D~Ashwini_Pokle1)))
 - ```d_flow``` (from this [paper](https://arxiv.org/pdf/2402.14017))
 - ```flow_priors``` (from this [paper](https://arxiv.org/abs/2405.18816))
@@ -110,8 +111,10 @@ Visual results will be saved in ```results/celeba/inpainting```.
 
 ## Acknowledgements
 This repository builds upon the following publicly available codes:
+- [PnP-Flow](https://arxiv.org/abs/2410.02423) available at https://github.com/annegnx/PnP-Flow. 
+which builds upons: 
 - [PnP-GS](https://openreview.net/pdf?id=fPhKeld3Okz) available at https://github.com/samuro95/GSPnP
 - [DiffPIR](https://openaccess.thecvf.com/content/CVPR2023W/NTIRE/papers/Zhu_Denoising_Diffusion_Models_for_Plug-and-Play_Image_Restoration_CVPRW_2023_paper.pdf) from the [DeepInv](https://deepinv.github.io/deepinv/stubs/deepinv.sampling.DiffPIR.html#deepinv.sampling.DiffPIR) library
 - The folder ImageGeneration is copied from [Rectified Flow](https://github.com/gnobitab/RectifiedFlow) repository.
-- We thank Yasi Zhang for helping us to debug our Flow Priors code.
+- We thank Anne Gagneux and S´egol`ene Martin for their assistance in reproducing pnp-flow results. 
 
