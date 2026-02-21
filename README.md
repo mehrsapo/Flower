@@ -6,7 +6,7 @@ Flower consists of three main steps.
 - Destination Estimation 
 - Destination Refinement
 - Time Progression 
-
+which jointly solve linear inverse problems.
 
 <img src="flower_demo/flower_steps.png" scale=0.8/>
 <img src="flower_demo/batch001_grid.png" scale=0.6/>
