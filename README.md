@@ -3,9 +3,9 @@
 [![OpenReview](https://img.shields.io/badge/OpenReview-ICLR_2026-blue.svg)](https://openreview.net/forum?id=QGd34p02mI)
 [![Project Page](https://img.shields.io/badge/Project%20Page-Online-green.svg)](https://mehrsapo.github.io/Flower/)
 
-This GitHub repository contains the code for our ICLR 2026 FLOWER [paper](https://openreview.net/forum?id=QGd34p02mI), a method that aims to solve inverse problems with pretrained flow matching models through a Bayesian viewpoint.
+This GitHub repository contains the code for our ICLR 2026 Flower [paper](https://openreview.net/forum?id=QGd34p02mI), a method that aims to solve inverse problems with pretrained flow matching models through a Bayesian viewpoint.
 
-FLOWER consists of three main steps. 
+Flower consists of three main steps. 
 - Destination Estimation 
 - Destination Refinement
 - Time Progression 
@@ -14,7 +14,7 @@ which jointly jointly approximate posterior sampling and solve linear inverse pr
 
 <img src="flower_demo/flower_steps.png" scale=0.8/>
 
-A visual example for the solution path of FLOWER for box inpainting:
+A visual example for the solution path of Flower for box inpainting:
 
 <img src="flower_demo/batch001_grid.png" scale=0.6/>
 
@@ -48,26 +48,26 @@ bash download_models.sh
 ## 2. Demo notebooks
 
 Two interactive Jupyter notebooks are included under the
-`flower_demo/` directory to help you get a feel for how the FLOWER
+`flower_demo/` directory to help you get a feel for how the Flower
 algorithm is used in practice. 
 
 ### 2.1 CS‑MRI with radial sampling
 
 `flower_demo/exps_cs_mri_radial.ipynb` starts by loading an
-`afhq_cat`‑trained FLOWER model (the default OT variant) and a single
+`afhq_cat`‑trained Flower model (the default OT variant) and a single
 RGB test image.  A radial undersampling mask is read from
 `radial_mask.mat`, and forward/adjoint MRI operators are defined using
 PyTorch FFTs.  The notebook implements the conjugate‑gradient solver
-used by FLOWER and then runs two reconstruction modes:
+used by Flower and then runs two reconstruction modes:
 `flower` (isotropic covariance approximation $\gamma = 0$) and `flower_cov` (full
 posterior covariance sampling $\gamma=1$).  After the iterative posterior sampler
 runs for 100 steps, the ground truth, zero‑filled adjoint image, and
-both FLOWER reconstructions are displayed side‑by‑side, along with the
+both Flower reconstructions are displayed side‑by‑side, along with the
 sampling sparsity and noise level.
 
 ### 2.2 Non‑isotropic denoising
 
-`flower_demo/exps_non_iso_noise.ipynb` demonstrates the use of FLOWER on two CelebA images affected by spatially
+`flower_demo/exps_non_iso_noise.ipynb` demonstrates the use of Flower on two CelebA images affected by spatially
 varying noise.  The notebook constructs a per‑pixel variance map where
 the centre region has four times the noise standard deviation of the
 border, and it extends the conjugate‑gradient solver to handle this
