@@ -3,10 +3,15 @@
 ![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)
 
 
-This GitHub repository contains the code for our ICLR 2026 Flower [paper](https://arxiv.org/pdf/2410.02423), a method combining PnP methods with Flow Matching pretrained models for solving image restoration problems. **Try out the [demo](https://github.com/annegnx/PnP-Flow/blob/main/demo/demo.ipynb)!**
+This GitHub repository contains the code for our ICLR 2026 Flower [paper](https://arxiv.org/abs/2509.26287), a method that aims to solve inverse problems with pretrained flow matching models through a Bayesian viewpoint.
 
-<img src="demo/algo.png" style="width: 50%; display: flex; justify-content: center;"/>
-<img src="demo/pnp_flow.png" scale=0.8/>
+Flower consists of three main steps. 
+- Destination Estimation 
+- Destination Refinement
+- Time Progression 
+
+<img src="demo/flower_steps.png" scale=0.8/>
+<img src="demo/batch001_grid.png" scale=0.8/>
 
 ## 1. Getting started
 To get started, clone the repository and install ```pnpflow``` via pip
