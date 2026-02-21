@@ -70,5 +70,5 @@ which builds upons:
 - [PnP-GS](https://openreview.net/pdf?id=fPhKeld3Okz) available at https://github.com/samuro95/GSPnP
 - [DiffPIR](https://openaccess.thecvf.com/content/CVPR2023W/NTIRE/papers/Zhu_Denoising_Diffusion_Models_for_Plug-and-Play_Image_Restoration_CVPRW_2023_paper.pdf) from the [DeepInv](https://deepinv.github.io/deepinv/stubs/deepinv.sampling.DiffPIR.html#deepinv.sampling.DiffPIR) library
 - The folder ImageGeneration is copied from [Rectified Flow](https://github.com/gnobitab/RectifiedFlow) repository.
-- We thank Anne Gagneux and S´egol`ene Martin for their assistance in reproducing pnp-flow results. 
+- We thank Anne Gagneux and Segolene Martin for their assistance in reproducing pnp-flow results. 
 
