@@ -9,7 +9,7 @@ Flower consists of three main steps.
 
 
 <img src="flower_demo/flower_steps.png" scale=0.8/>
-<img src="flower_demo/batch001_grid.png" scale=0.7/>
+<img src="flower_demo/batch001_grid.png" scale=0.6/>
 
 ## 1. Getting started
 To get started, clone and install the repository with 
