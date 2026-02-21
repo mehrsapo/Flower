@@ -83,31 +83,20 @@ The available inverse problems are:
 The parameters of the inverse problems (e.g., noise level) can be adjusted manually in the ```main.py``` file.
 
 The available methods are
-- ```pnp_flow``` 
+- ```flower``` (our method)
+- ```pnp_flow``` (from this [paper](https://arxiv.org/pdf/2402.14017))
 - ```ot_ode``` (from this [paper](https://openreview.net/forum?id=PLIt3a4yTm&referrer=%5Bthe%20profile%20of%20Ashwini%20Pokle%5D(%2Fprofile%3Fid%3D~Ashwini_Pokle1)))
 - ```d_flow``` (from this [paper](https://arxiv.org/pdf/2402.14017))
 - ```flow_priors``` (from this [paper](https://arxiv.org/abs/2405.18816))
 - ```pnp_diff``` (from this [paper](https://openaccess.thecvf.com/content/CVPR2023W/NTIRE/papers/Zhu_Denoising_Diffusion_Models_for_Plug-and-Play_Image_Restoration_CVPRW_2023_paper.pdf))
 - ```pnp_gs``` (from this [paper](https://openreview.net/pdf?id=fPhKeld3Okz))
 
-### 3.1. Finding the optimal parameters on the validation set
-
-The optimal parameters can tuned running
-```python 
-python bash scripts/script_val.sh
-```
-
-You can also use the optimal values we found, as reported in the Appendix of the paper, and input them into the configuration files of the methods.
 
 ### 3.2. Evaluation on the test set
 
-You can either directely run
-```python
-python main.py --opts dataset celeba train False eval True problem inpainting method pnp_flow
-```
-or the use the bash file ```scripts/script_test.sh```.
+Use the bash file ```scripts/script_test.sh```.
 
-Visual results will be saved in ```results/celeba/inpainting```.
+Visual results will be saved in ```results``` folder. 
 
 ## Acknowledgements
 This repository builds upon the following publicly available codes:
