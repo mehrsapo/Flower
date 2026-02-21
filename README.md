@@ -19,19 +19,15 @@ cd Flower
 pip install -e .
 ```
 
-### 1.2. Download datasets and pretrained models
+### 1.2. Download datasets 
 
-<b>CelebA.</b> To download the [CelebA](https://www.kaggle.com/datasets/jessicali9530/celeba-dataset) dataset and the pre-trained OT FM network (U-Net), run the following commands:
+To download the [CelebA](https://www.kaggle.com/datasets/jessicali9530/celeba-dataset) and [AFHQ-CAT](https://github.com/clovaai/stargan-v2/blob/master/README.md#animal-faces-hq-dataset-afhq) datasets, run the command:
 ```bash
-bash download.sh celeba-dataset
+bash download_data.sh
 ```
-
-<b>AFHQ-CAT.</b> To download the [AFHQ-CAT](https://github.com/clovaai/stargan-v2/blob/master/README.md#animal-faces-hq-dataset-afhq) dataset and the pre-trained OT FM network (U-Net), run the following commands:
-```bash
-bash download.sh afhq-cat-dataset
-```
-
 Note that as the dataset AFHQ-Cat doesn't have a test split, we create one when downloading the dataset. 
+
+### 1.2. Download pretrained models 
 
 The FM models can directly be downloaded here: [CelebA model](https://drive.google.com/file/d/1ZZ6S-PGRx-tOPkr4Gt3A6RN-PChabnD6/view?usp=drive_link), [AFHQ-Cat model](https://drive.google.com/file/d/1FpD3cYpgtM8-KJ3Qk48fcjtr1Ne_IMOF/view?usp=drive_link)
 
