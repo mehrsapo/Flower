@@ -84,9 +84,10 @@ class DataLoaders:
             ])
 
             # transform = False
-            img_dir_test = './data/afhq_cat/test/cat/'
-            img_dir_val = './data/afhq_cat/val/cat/'
-            img_dir_train = './data/afhq_cat/train/cat/'
+            _root = os.path.join(os.path.dirname(__file__), '..')
+            img_dir_test = os.path.join(_root, 'data/afhq_cat/test/cat/')
+            img_dir_val = os.path.join(_root, 'data/afhq_cat/val/cat/')
+            img_dir_train = os.path.join(_root, 'data/afhq_cat/train/cat/')
             test_dataset = AFHQDataset(
                 img_dir_test, batchsize=self.batch_size_test, transform=transform, split='test')
             val_dataset = AFHQDataset(

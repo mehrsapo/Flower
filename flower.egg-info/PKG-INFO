@@ -14,8 +14,6 @@ Requires-Dist: ml_collections
 Requires-Dist: ninja
 Requires-Dist: opencv-python
 Requires-Dist: pytorch-ignite
-Requires-Dist: torch
-Requires-Dist: torchvision
 Requires-Dist: torchdiffeq
 Requires-Dist: torchmetrics
 Requires-Dist: pandas

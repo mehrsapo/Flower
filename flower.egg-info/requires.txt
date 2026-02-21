@@ -6,8 +6,6 @@ ml_collections
 ninja
 opencv-python
 pytorch-ignite
-torch
-torchvision
 torchdiffeq
 torchmetrics
 pandas
