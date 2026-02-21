@@ -37,7 +37,7 @@ The FM models can directly be downloaded here: [CelebA model](https://drive.goog
 
 And the denoisers for the PnP-GS method here: [CelebA model](https://drive.google.com/file/d/1ZqBeafErEogaXFupW0ZSLL7P9QoRA-lN/view?usp=drive_link), [AFHQ-Cat model](https://drive.google.com/file/d/17AXI9p17c7h_xaI19qDcTT2u9_wu0DQY/view?usp=drive_link). 
 
-```
+
 ## 3. Solving inverse problems
 
 The available inverse problems are:
