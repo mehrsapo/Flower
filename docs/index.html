@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="FLOWER: A Flow Matching Solver for Inverse Problems">
+  <meta property="og:title" content="FLOWER"/>
+  <meta property="og:description" content="FLOWER: A Flow Matching Solver for Inverse Problems"/>
+  <meta property="og:url" content="URL OF THE WEBSITE"/>
+  <meta property="og:image" content="static/image/your_banner_image.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+  <meta name="twitter:title" content="FLOWER">
+  <meta name="twitter:description" content="FLOWER: A Flow Matching Solver for Inverse Problems">
+  <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>FLOWER</title>
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+
+  <!-- MathJax for LaTeX rendering -->
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">FLOWER: A Flow-Matching Solver for Inverse Problems</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><a href="https://mehrsapo.github.io/#/" target="_blank">Mehrsa Pourya</a>,</span>
+              <span class="author-block"><a href="https://www.jku.at/institut-fuer-machine-learning/ueber-uns/team/ass-prof-dr-erich-kobler/" target="_blank">Erich Kobler</a>,</span>
+              <span class="author-block"><a href="https://bigwww.epfl.ch/unser/" target="_blank">Michael Unser</a>,</span>
+              <span class="author-block"><a href="https://www.tu-chemnitz.de/mathematik/invimg/kontakt.en.php" target="_blank">Sebastian Neumayer</a></span>
+            </div>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">ICLR 2026</span>
+            </div>
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://openreview.net/forum?id=QGd34p02mI" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://github.com/mehrsapo/Flower" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2509.26287" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaser video-->
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <video poster="" id="tree" autoplay controls muted loop height="100%">
+          <source src="static/images/figure2.png" type="image/png">
+        </video>
+        <h2 class="subtitle has-text-centered">
+          FLOWER aims to solve inverse problems with pretrained flow matching models through a Bayesian viewpoint. It consists of three main steps: 
+- Destination Estimation 
+- Destination Refinement
+- Time Progression 
+
+which jointly solve linear inverse problems.
+        </h2>
+      </div>
+    </div>
+  </section>
+  <!-- End teaser video -->
+
+  <!-- Paper abstract -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              We introduce Flower, a solver for linear inverse problems. It leverages a pre-trained flow model to produce reconstructions that are consistent with the observed measurements. Flower operates through an iterative procedure over three steps: (i) a flow-consistent destination estimation, where the velocity network predicts a denoised target; (ii) a refinement step that projects the estimated destination onto a feasible set defined by the forward operator; and (iii) a time-progression step that re-projects the refined destination along the flow trajectory. We provide a theoretical analysis that demonstrates how Flower approximates Bayesian posterior sampling, thereby unifying perspectives from plug-and-play methods and generative inverse solvers. On the practical side, Flower achieves state-of-the-art reconstruction quality while using nearly identical hyperparameters across various linear inverse problems.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End paper abstract -->
+
+
+<!-- Image carousel -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+       <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/figure1.png" alt="MY ALT TEXT"/>
+        <h2 class="subtitle has-text-centered">
+          A visual example for the solution path of FLOWER for box inpainting. 
+        </h2>
+
+  </div>
+</div>
+</div>
+</section>
+<!-- End image carousel -->
+
+
+  <!-- BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@inproceedings{pourya2026flower,
+    title={{FLOWER}: A Flow-Matching Solver for Inverse Problems},
+    author={Mehrsa Pourya and Bassam El Rawas and Michael Unser},
+    booktitle={The Fourteenth International Conference on Learning Representations},
+    year={2026},
+    url={https://openreview.net/forum?id=QGd34p02mI}
+  }
+</code></pre>
+    </div>
+  </section>
+  <!-- End BibTex citation -->
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+              You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
