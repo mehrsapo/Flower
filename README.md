@@ -11,7 +11,7 @@ which jointly solve linear inverse problems.
 
 <img src="flower_demo/flower_steps.png" scale=0.8/>
 
-A visual example for the solution path of FLower:
+A visual example for the solution path of FLower for box inpainting:
 
 <img src="flower_demo/batch001_grid.png" scale=0.6/>
 
