@@ -1,9 +1,9 @@
-# PnP-Flow
+# Flower
 ![build](https://github.com/annegnx/PnP-Flow/actions/workflows/main.yml/badge.svg)
 ![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)
 
 
-This GitHub repository contains the code for our ICLR 2025 PnP-Flow [paper](https://arxiv.org/pdf/2410.02423), a method combining PnP methods with Flow Matching pretrained models for solving image restoration problems. **Try out the [demo](https://github.com/annegnx/PnP-Flow/blob/main/demo/demo.ipynb)!**
+This GitHub repository contains the code for our ICLR 2026 Flower [paper](https://arxiv.org/pdf/2410.02423), a method combining PnP methods with Flow Matching pretrained models for solving image restoration problems. **Try out the [demo](https://github.com/annegnx/PnP-Flow/blob/main/demo/demo.ipynb)!**
 
 <img src="demo/algo.png" style="width: 50%; display: flex; justify-content: center;"/>
 <img src="demo/pnp_flow.png" scale=0.8/>
@@ -12,7 +12,7 @@ This GitHub repository contains the code for our ICLR 2025 PnP-Flow [paper](http
 To get started, clone the repository and install ```pnpflow``` via pip
 
 ```
-cd PnP-Flow
+cd Flower
 pip install -e .
 ```
 ### 1.1. Requirements
