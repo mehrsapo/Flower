@@ -1,4 +1,4 @@
-# Flower
+# FLOWER: A Flow Matching Solvert for Inverse Problems
 
 This GitHub repository contains the code for our ICLR 2026 Flower [paper](https://arxiv.org/abs/2509.26287), a method that aims to solve inverse problems with pretrained flow matching models through a Bayesian viewpoint.
 
@@ -24,15 +24,15 @@ conda env create -f environment.yml
 conda activate flower
 ```
 
-This will install all dependencies and the package in editable mode. The environment uses Python 3.12.2 with PyTorch installed via conda (CUDA 12.4 by default — edit `environment.yml` to match your CUDA version, or replace `pytorch-cuda=12.4` with `cpuonly` for a CPU-only setup).
+This will install all dependencies and the package in editable mode. The environment uses Python 3.12.2 with PyTorch installed via conda (CUDA 12.4 by default — edit `environment.yml` to match your CUDA version, or replace `pytorch-cuda=12.4` with `cpuonly` for a CPU-only up).
 
-### 1.1. Download datasets
+### 1.1. Download datas
 
-To download the [CelebA](https://www.kaggle.com/datasets/jessicali9530/celeba-dataset) and [AFHQ-Cat](https://github.com/clovaai/stargan-v2/blob/master/README.md#animal-faces-hq-dataset-afhq) datasets, run the command:
+To download the [CelebA](https://www.kaggle.com/datas/jessicali9530/celeba-data) and [AFHQ-Cat](https://github.com/clovaai/stargan-v2/blob/master/README.md#animal-faces-hq-data-afhq) datas, run the command:
 ```bash
 bash download_data.sh
 ```
-Note that since the AFHQ-Cat dataset does not have a test split, we create one when downloading the dataset.
+Note that since the AFHQ-Cat data does not have a test split, we create one when downloading the data.
 
 ### 1.2. Download pretrained models
 
@@ -46,9 +46,7 @@ bash download_models.sh
 
 Two interactive Jupyter notebooks are included under the
 `flower_demo/` directory to help you get a feel for how the FLOWER
-algorithm is used in practice.  They are standalone scripts that
-initialise the same configuration and model code used by the
-reproduction scripts, then run small toy examples and plot the results.
+algorithm is used in practice. 
 
 ### 2.1 CS‑MRI with radial sampling
 
@@ -58,30 +56,29 @@ RGB test image.  A radial undersampling mask is read from
 `radial_mask.mat`, and forward/adjoint MRI operators are defined using
 PyTorch FFTs.  The notebook implements the conjugate‑gradient solver
 used by FLOWER and then runs two reconstruction modes:
-`flower` (isotropic covariance approximation) and `flower_cov` (full
-posterior covariance sampling).  After the iterative posterior sampler
+`flower` (isotropic covariance approximation $\gamma = 0$) and `flower_cov` (full
+posterior covariance sampling $\gamma=1$).  After the iterative posterior sampler
 runs for 100 steps, the ground truth, zero‑filled adjoint image, and
 both FLOWER reconstructions are displayed side‑by‑side, along with the
 sampling sparsity and noise level.
 
 ### 2.2 Non‑isotropic denoising
 
-`flower_demo/exps_non_iso_noise.ipynb` demonstrates the same flow
-model on a pair of pre‑cropped CelebA images affected by spatially
+`flower_demo/exps_non_iso_noise.ipynb` demonstrates the use of FLOWER on two CelebA images affected by spatially
 varying noise.  The notebook constructs a per‑pixel variance map where
 the centre region has four times the noise standard deviation of the
 border, and it extends the conjugate‑gradient solver to handle this
-non‑isotropic covariance directly.  A small 20‑step reverse‑diffusion
-loop applies the FLOWER sampler, and the resulting noisy input and
-reconstruction are plotted with PSNR values.
+non‑isotropic covariance directly.  
 
-*Hint:* any new inverse problem can be tackled simply by defining a
+*NOTE:* any new inverse problem can be tackled simply by defining a
 different linear forward operator `H` and its adjoint `Hᵗ`—the CS‑MRI
 notebook shows a masked FFT example, but you could equally replace it
 with convolution, subsampling, or any other linear map and then run
 the same code.
 
 ## 3. Reproduction of paper results for solving inverse problems
+Our comparisons build upon the [PnP-Flow]( https://github.com/annegnx/PnP-Flow) benchmark. 
+
 Use the bash scripts in the ```scripts/``` folder.
 
 Visual and numerical results will be saved in the ```results/``` folder.
@@ -99,11 +96,11 @@ The available methods are
 Note that ```flower``` and ```flower_cov``` support two modes for the pretrained flow model: 1. ```ot```: with optimal transport coupling (used for comparisons), and 2. ```flow_indp```: with no optimal transport coupling during training. Read the paper for more details.
 
 The available inverse problems are:
-  - Denoising --> set ```problem: 'denoising'```
-  - Gaussian deblurring --> set ```problem: 'gaussian_deblurring'```
-  - Super-resolution --> set ```problem: 'superresolution'```
-  - Box inpainting --> set ```problem: 'inpainting'```
-  - Random inpainting --> set ```problem: 'random_inpainting'```
+  - Denoising -->  ```problem: 'denoising'```
+  - Gaussian deblurring -->  ```problem: 'gaussian_deblurring'```
+  - Super-resolution -->  ```problem: 'superresolution'```
+  - Box inpainting -->  ```problem: 'inpainting'```
+  - Random inpainting -->  ```problem: 'random_inpainting'```
 
 
 ## 4. Questions & Contact
