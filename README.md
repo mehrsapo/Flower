@@ -18,57 +18,25 @@ To get started, clone and install the repository with
 cd Flower
 pip install -e .
 ```
-### 1.1. Requirements
-
-- torch 1.13.1 (or later)
-- torchvision
-- tqdm
-- numpy
-- pandas
-- pyyaml
-- scipy
-- torchdiffeq
-- deepinv
 
 ### 1.2. Download datasets and pretrained models
-
-We provide a script to download datasets used in PnP-Flow and the corresponding pre-trained networks. The datasets and network checkpoints will be downloaded and stored in the `data` and `model` directories, respectively.
 
 <b>CelebA.</b> To download the [CelebA](https://www.kaggle.com/datasets/jessicali9530/celeba-dataset) dataset and the pre-trained OT FM network (U-Net), run the following commands:
 ```bash
 bash download.sh celeba-dataset
-bash download.sh pretrained-network-celeba
 ```
 
 <b>AFHQ-CAT.</b> To download the [AFHQ-CAT](https://github.com/clovaai/stargan-v2/blob/master/README.md#animal-faces-hq-dataset-afhq) dataset and the pre-trained OT FM network (U-Net), run the following commands:
 ```bash
 bash download.sh afhq-cat-dataset
-bash download.sh pretrained-network-afhq-cat
 ```
 
-Note that as the dataset AFHQ-Cat doesn't have a validation split, we create one when downloading the dataset. 
+Note that as the dataset AFHQ-Cat doesn't have a test split, we create one when downloading the dataset. 
 
-Alternatively, the FM models can directly be downloaded here: [CelebA model](https://drive.google.com/file/d/1ZZ6S-PGRx-tOPkr4Gt3A6RN-PChabnD6/view?usp=drive_link), [AFHQ-Cat model](https://drive.google.com/file/d/1FpD3cYpgtM8-KJ3Qk48fcjtr1Ne_IMOF/view?usp=drive_link), [MNIST-Dirichlet model](https://drive.google.com/file/d/1If5gkWEfChJHc8v8CCEhGhEeeAqsxKTz/view?usp=drive_link)
+The FM models can directly be downloaded here: [CelebA model](https://drive.google.com/file/d/1ZZ6S-PGRx-tOPkr4Gt3A6RN-PChabnD6/view?usp=drive_link), [AFHQ-Cat model](https://drive.google.com/file/d/1FpD3cYpgtM8-KJ3Qk48fcjtr1Ne_IMOF/view?usp=drive_link)
 
-And the denoisers for the PnP-GS method here: [CelebA model](https://drive.google.com/file/d/1ZqBeafErEogaXFupW0ZSLL7P9QoRA-lN/view?usp=drive_link), [AFHQ-Cat model](https://drive.google.com/file/d/17AXI9p17c7h_xaI19qDcTT2u9_wu0DQY/view?usp=drive_link)
+And the denoisers for the PnP-GS method here: [CelebA model](https://drive.google.com/file/d/1ZqBeafErEogaXFupW0ZSLL7P9QoRA-lN/view?usp=drive_link), [AFHQ-Cat model](https://drive.google.com/file/d/17AXI9p17c7h_xaI19qDcTT2u9_wu0DQY/view?usp=drive_link). 
 
-## 2. Training
-
-You can also use the code to train your own OT Flow Matching model.
-
-You can modify the config options directly in the main_config.yaml file located in ```config/```. Alternatively, config keys can be given as options directly in the command line.
-
-For example, to train the generative flow matching model (here, the U-net is the velocity) on CelebA, with a Gaussian latent distribution, run:
-```python
-python main.py --opts dataset celeba train True eval False batch_size 128 num_epoch 100
-```
-At each 5 epochs, the model is saved in ```./model/celeba/gaussian/ot```. Generated samples are saved in ```./results/celeba/gaussian/ot```.
-
-### Computing generative model scores
-
-After the training, the final model is loaded and can be used for generating samples / solving inverse problems. You can compute the full FID (based on 50000 generated samples), the Vendi score, and the Slice Wasserstein score running
-```python
-python main.py --opts dataset mnist train False eval True compute_metrics True solve_inverse_problem False
 ```
 ## 3. Solving inverse problems
 
@@ -78,9 +46,6 @@ The available inverse problems are:
 - Super-resolution --> set ```problem: 'superresolution'```
 - Box inpainting --> set ```problem: 'inpainting'```
 - Random inpainting --> set ```problem: 'random_inpainting'```
-- Free-form inpainting --> set ```problem: 'paintbrush_inpainting'```
-
-The parameters of the inverse problems (e.g., noise level) can be adjusted manually in the ```main.py``` file.
 
 The available methods are
 - ```flower``` (our method)
@@ -92,7 +57,7 @@ The available methods are
 - ```pnp_gs``` (from this [paper](https://openreview.net/pdf?id=fPhKeld3Okz))
 
 
-### 3.2. Evaluation on the test set
+### 3.2. Reproduction of paper results
 
 Use the bash files ```scripts/``.
 
