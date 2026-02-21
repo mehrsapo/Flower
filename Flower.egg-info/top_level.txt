@@ -1,6 +1,0 @@
-config
-data
-flower_demo
-model
-pnpflow
-scripts
