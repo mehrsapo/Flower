@@ -10,6 +10,9 @@ Flower consists of three main steps.
 which jointly solve linear inverse problems.
 
 <img src="flower_demo/flower_steps.png" scale=0.8/>
+
+A visual example for the solution path of FLower:
+
 <img src="flower_demo/batch001_grid.png" scale=0.6/>
 
 ## 1. Getting started
