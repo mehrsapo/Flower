@@ -200,7 +200,7 @@ class AFHQDataset(Dataset):
         self.transform = transform
         self.split     = split
 
-        list_file='/home/pourya/PnP-Flow1/400_filenames.txt'
+        list_file=os.path.join(os.path.dirname(__file__), '..', 'data_splits', '400_filenames.txt')
         if split in ('train', 'val'):
             # Old behavior
             self.files = sorted(os.listdir(self.img_dir))
