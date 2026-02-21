@@ -102,58 +102,6 @@ The available inverse problems are:
   - Random inpainting --> set ```problem: 'random_inpainting'```
 
 
-
-## 3. Demo notebooks
-
-Two interactive Jupyter notebooks are included under the
-`flower_demo/` directory to help you get a feel for how the FLOWER
-algorithm is used in practice.  They are standalone scripts that
-initialise the same configuration and model code used by the
-reproduction scripts, then run small toy examples and plot the results.
-
-### 3.1 CS‑MRI with radial sampling
-
-`flower_demo/exps_cs_mri_radial.ipynb` starts by loading an
-`afhq_cat`‑trained FLOWER model (the default OT variant) and a single
-RGB test image.  A radial undersampling mask is read from
-`radial_mask.mat`, and forward/adjoint MRI operators are defined using
-PyTorch FFTs.  The notebook implements the conjugate‑gradient solver
-used by FLOWER and then runs two reconstruction modes:
-`flower` (isotropic covariance approximation) and `flower_cov` (full
-posterior covariance sampling).  After the iterative posterior sampler
-runs for 100 steps, the ground truth, zero‑filled adjoint image, and
-both FLOWER reconstructions are displayed side‑by‑side, along with the
-sampling sparsity and noise level.
-
-### 3.2 Non‑isotropic denoising
-
-`flower_demo/exps_non_iso_noise.ipynb` demonstrates the same flow
-model on a pair of pre‑cropped CelebA images affected by spatially
-varying noise.  The notebook constructs a per‑pixel variance map where
-the centre region has four times the noise standard deviation of the
-border, and it extends the conjugate‑gradient solver to handle this
-non‑isotropic covariance directly.  A small 20‑step reverse‑diffusion
-loop applies the FLOWER sampler, and the resulting noisy input and
-reconstruction are plotted with PSNR values.
-
-### Running the demos
-
-To explore the notebooks yourself, launch a Jupyter server from the
-repository root and open the `.ipynb` files::
-
-```bash
-cd Flower
-conda activate flower           # or your preferred env
-jupyter lab                    # or jupyter notebook
-```
-
-The cells are meant to be executed sequentially; the first cell adds
-the project root to `sys.path` so that the package imports work
-regardless of the working directory.  You can also run the notebooks
-from the command line with `nbconvert` if you prefer to generate
-static HTML outputs.
-
-
 ## 4. Questions & Contact
 
   If you run into issues, have questions about the code, or would like to
