@@ -7,15 +7,13 @@ batch_size_ip=1
 
 # ### OT ODE  (t0=start_time, gamma: sqrt(t)->gamma_t, constant->constant)
 method=ot_ode
-'''problem=denoising
+problem=denoising
 python main.py --opts dataset ${dataset} eval_split ${eval_split} model ${model} problem ${problem} method ${method} start_time 0.3 max_batch ${max_batch} batch_size_ip ${batch_size_ip} gamma gamma_t device cuda:1
 problem=gaussian_deblurring_FFT
 python main.py --opts dataset ${dataset} eval_split ${eval_split} model ${model} problem ${problem} method ${method} start_time 0.3 max_batch ${max_batch} batch_size_ip ${batch_size_ip} gamma gamma_t device cuda:1
-'''
 problem=superresolution
 python main.py --opts dataset ${dataset} eval_split ${eval_split} model ${model} problem ${problem} method ${method} start_time 0.1 max_batch ${max_batch} batch_size_ip ${batch_size_ip} gamma constant device cuda:1
-'''problem=inpainting   # box inpainting
+problem=inpainting   # box inpainting
 python main.py --opts dataset ${dataset} eval_split ${eval_split} model ${model} problem ${problem} method ${method} start_time 0.1 max_batch ${max_batch} batch_size_ip ${batch_size_ip} gamma gamma_t device cuda:1
 problem=random_inpainting
 python main.py --opts dataset ${dataset} eval_split ${eval_split} model ${model} problem ${problem} method ${method} start_time 0.1 max_batch ${max_batch} batch_size_ip ${batch_size_ip} gamma constant device cuda:1
-'''

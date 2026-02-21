@@ -6,18 +6,18 @@ batch_size_ip=1
 num_samples=1
 problem=gaussian_deblurring_FFT
 
-'''## FLOWER
+## FLOWER
 method=flower
 python main.py --opts dataset ${dataset} eval_split ${eval_split} model ${model} problem ${problem} method ${method} num_samples ${num_samples} max_batch ${max_batch} batch_size_ip ${batch_size_ip} steps 100 compute_memory True compute_time True save_results False steps_pnp 100 device cuda:0
 
 ## PNP FLOW
 method=pnp_flow
 python main.py --opts dataset ${dataset} eval_split ${eval_split} model ${model} problem ${problem} method ${method} lr_pnp 1.0 alpha 0.01 num_samples ${num_samples} max_batch ${max_batch} batch_size_ip ${batch_size_ip} compute_memory True compute_time True save_results False steps_pnp 100 device cuda:0
-
+ 
 ## OT ODE
 method=ot_ode
 python main.py --opts dataset ${dataset} eval_split ${eval_split} model ${model} problem ${problem} method ${method} start_time 0.4  gamma gamma_t max_batch ${max_batch} batch_size_ip ${batch_size_ip}  compute_memory True compute_time True save_results False steps_pnp 100 device cuda:0
-'''
+
 ## FLOW PRIORS
 method=flow_priors
 python main.py --opts dataset ${dataset} eval_split ${eval_split} model ${model} problem ${problem} method ${method} eta 0.01 lmbda 1000  max_batch ${max_batch} batch_size_ip ${batch_size_ip} compute_memory True compute_time True save_results False device cuda:0
