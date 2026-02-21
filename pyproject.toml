@@ -3,14 +3,24 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pnpflow"
-description = "Pytorch library for solving inverse problems with generative models (benchmark flow matching, diffusion)"
+# 1. Change to your method's name or paper acronym
+name = "flower" 
+
+# 2. Update the description to highlight your paper, mentioning it builds on PnP-Flow
+description = "Code for Flower. Built on the PnP-Flow benchmark."
+
+# 3. Add yourself as the primary author, but keep the original authors out of respect
 authors = [
-    {name="Anne Gagneux", email="anne.gagneux@ens-lyon.fr"},
-    {name="Ségolène Martin"},
-    {name="Paul Hagemann"},
-    ]
-license = {text = "BSD (3-Clause)"}
+    {name="Mehrsa Pourya", email="mehrsapo@gmail.com"},
+    {name="Anne Gagneux (Original PnP-Flow)"},
+    {name="Ségolène Martin (Original PnP-Flow)"},
+    {name="Paul Hagemann (Original PnP-Flow)"},
+]
+
+# 4. Change the license text to MIT
+license = {text = "MIT"}
+
+# 5. Add any NEW libraries your method uses to this list!
 dependencies = [
     "deepinv",
     "gdown",
@@ -32,12 +42,12 @@ dependencies = [
 dynamic = ["version"]
 
 [tool.setuptools.dynamic]
-version = {attr = "pnpflow.__version__"}
+version = {attr = "pnpflow.__version__"} # Consider changing 'pnpflow' if you rename the main python folder
 
 [tool.setuptools.packages.find]
-where = ["."]  # list of folders that contain the packages (["."] by default)
+where = ["."]  
 
 [project.optional-dependencies]
 rectified = [
     "jax",
-    ]
+]
