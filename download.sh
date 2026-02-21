@@ -30,7 +30,7 @@ elif  [ $FILE == "afhq-cat-dataset" ]; then
     unzip $ZIP_FILE -d $DEST_DIR
     rm $ZIP_FILE
     mv ./data/afhq ./data/afhq_cat
-    bash scripts/afhq_validation_images.sh
+    #bash scripts/afhq_validation_images.sh
 
 elif  [ $FILE == "celeba-dataset" ]; then
     DEST_DIR=./data/celeba

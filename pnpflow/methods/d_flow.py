@@ -120,20 +120,29 @@ class D_FLOW(object):
                 optim_img.step(closure)
 
                 restored_img = self.forward_flow_matching(z.detach())
-      
+                # utils.save_images(
+                #     clean_img, noisy_img, restored_img, self.args, H_adj, iter=iteration)
+                '''utils.compute_psnr(clean_img, noisy_img,
+                                   restored_img, self.args, H_adj, iter=iteration)
+                utils.compute_ssim(clean_img, noisy_img,
+                                   restored_img, self.args, H_adj, iter=iteration)
+                utils.compute_lpips(clean_img, noisy_img,
+                                    restored_img, self.args, H_adj, iter=iteration)'''
+
                 if self.args.compute_time:
                     torch.cuda.synchronize()
                     time_counter_2 = perf_counter()
                     time_per_batch += time_counter_2 - time_counter_1
-                # if self.args.save_results:
-                #     # utils.save_images(
-                #     #     clean_img, noisy_img, restored_img, self.args, H_adj, iter=iteration)
-                #     utils.compute_psnr(clean_img, noisy_img,
-                #                        restored_img, self.args, H_adj, iter=iteration)
-                #     utils.compute_ssim(clean_img, noisy_img,
-                #                        restored_img, self.args, H_adj, iter=iteration)
-                #     utils.compute_lpips(clean_img, noisy_img,
-                #                         restored_img, self.args, H_adj, iter=iteration)
+                
+                '''if self.args.save_results:
+                    # utils.save_images(
+                    #     clean_img, noisy_img, restored_img, self.args, H_adj, iter=iteration)
+                    utils.compute_psnr(clean_img, noisy_img,
+                                       restored_img, self.args, H_adj, iter=iteration)
+                    utils.compute_ssim(clean_img, noisy_img,
+                                       restored_img, self.args, H_adj, iter=iteration)
+                    utils.compute_lpips(clean_img, noisy_img,
+                                        restored_img, self.args, H_adj, iter=iteration)'''
 
                 del restored_img
 

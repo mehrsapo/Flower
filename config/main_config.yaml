@@ -21,3 +21,4 @@ EVAL:
     compute_memory: False
     compute_time: False
     save_results: True
+    device: cuda:0

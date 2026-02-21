@@ -30,7 +30,7 @@ class DataLoaders:
                 v2.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
             ])
             # Paths
-            img_dir = './data/celeba/img_align_celeba/'
+            img_dir = './data/celeba/img_align_celeba/img_align_celeba'
             partition_csv = './data/celeba/list_eval_partition.csv'
 
             # Datasets
@@ -84,15 +84,15 @@ class DataLoaders:
             ])
 
             # transform = False
-            img_dir_test = '.data/afhq_cat/test/cat/'
-            img_dir_val = '.data/afhq_cat/val/cat/'
-            img_dir_train = '.data/afhq_cat/train/cat/'
+            img_dir_test = './data/afhq_cat/test/cat/'
+            img_dir_val = './data/afhq_cat/val/cat/'
+            img_dir_train = './data/afhq_cat/train/cat/'
             test_dataset = AFHQDataset(
-                img_dir_test, batchsize=self.batch_size_test, transform=transform)
+                img_dir_test, batchsize=self.batch_size_test, transform=transform, split='test')
             val_dataset = AFHQDataset(
-                img_dir_val, batchsize=self.batch_size_test, transform=transform)
+                img_dir_val, batchsize=self.batch_size_test, transform=transform, split='val')
             train_dataset = AFHQDataset(
-                img_dir_train, batchsize=self.batch_size_test, transform=transform)
+                img_dir_train, batchsize=self.batch_size_test, transform=transform, split='train')
             test_loader = DataLoader(
                 test_dataset,
                 batch_size=self.batch_size_test,
@@ -154,7 +154,7 @@ class CelebAHQDataset(Dataset):
     """CelebA HQ dataset."""
 
     def __init__(self, data_dir, batchsize, transform=None):
-        self.files = sorted(os.listdir(data_dir))
+        self.files = os.listdir(data_dir)
         self.root_dir = data_dir
         self.num_imgs = len(os.listdir(self.root_dir))
         self.transform = transform
@@ -181,33 +181,96 @@ class CelebAHQDataset(Dataset):
         return image, 0
 
 
-class AFHQDataset(Dataset):
-    """AFHQ Cat dataset."""
+import os
+import warnings
+from PIL import Image
+from torch.utils.data import Dataset
 
-    def __init__(self, img_dir, batchsize, category='cat', transform=None):
-        self.files = sorted(os.listdir(img_dir))
-        self.num_imgs = len(self.files)
+class AFHQDataset(Dataset):
+    """AFHQ Cat dataset.
+       - train/val: keep old behavior (scan img_dir)
+       - test: read file names from a list file
+    """
+
+    def __init__(self, img_dir, batchsize, category='cat', transform=None,
+                 split='train'):
+        self.img_dir   = img_dir
         self.batchsize = batchsize
-        self.img_dir = img_dir
+        self.category  = category
         self.transform = transform
+        self.split     = split
+
+        list_file='/home/pourya/PnP-Flow1/400_filenames.txt'
+        if split in ('train', 'val'):
+            # Old behavior
+            self.files = sorted(os.listdir(self.img_dir))
+        elif split == 'test':
+            if list_file is None:
+                raise ValueError("For split='test', you must provide list_file=path/to/filenames.txt")
+
+            # Load names from list_file (ignore blanks and comments)
+            with open(list_file, "r", encoding="utf-8") as f:
+                wanted = [
+                    line.strip().rstrip("\r")
+                    for line in f
+                    if line.strip() and not line.lstrip().startswith("#")
+                ]
+
+            # Resolve to full paths; if the entry has a path separator, treat as relative to img_dir;
+            # absolute paths are used as-is.
+            resolved, missing = [], []
+            for name in wanted:
+                if os.path.isabs(name):
+                    path = name
+                elif os.sep in name:
+                    path = os.path.normpath(os.path.join(self.img_dir, name))
+                else:
+                    path = os.path.join(self.img_dir, name)
+
+                if os.path.exists(path):
+                    resolved.append(path)
+                else:
+                    missing.append(path)
+
+            if missing:
+                preview = "\n  ".join(missing[:5])
+                warnings.warn(
+                    f"{len(missing)} files listed in {list_file} were not found under {self.img_dir}.\n"
+                    f"First few missing:\n  {preview}"
+                )
+
+            if not resolved:
+                raise RuntimeError("No valid images found from the provided list_file for split='test'.")
+
+            # For test we store full paths to avoid extra joins later
+            self.files = resolved
+        else:
+            raise ValueError("split must be one of: 'train', 'val', 'test'")
+
+        self.num_imgs = len(self.files)
 
     def __len__(self):
         return self.num_imgs
 
     def __getitem__(self, idx):
-        img_name = self.files[idx]
-        img_path = os.path.join(self.img_dir, img_name)
+        entry = self.files[idx]
 
+        # train/val entries are basenames; test entries are full paths
+        if self.split in ('train', 'val'):
+            img_path = os.path.join(self.img_dir, entry)
+        else:  # test
+            img_path = entry
+
+        # Safety: skip missing files at access time (should be rare after init)
         if not os.path.exists(img_path):
-            warnings.warn(f"File not found: {img_path}. Skipping.")
+            warnings.warn(f"File not found at access time: {img_path}. Skipping.")
             return None, None
 
         image = Image.open(img_path).convert('RGB')
-
         if self.transform:
             image = self.transform(image)
-
         return image, 0
+
 
 
 def custom_collate(batch):

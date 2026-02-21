@@ -263,6 +263,9 @@ def get_sinusoidal_positional_embedding(
     This matches the implementation in tensor2tensor, but differs slightly
     from the desrciption in Section 3.5 of "Attention Is All You Need".
     """
+    if len(timesteps.size()) == 0:
+        timesteps = timesteps.unsqueeze(0)
+    #print(timesteps, timesteps.size())
     assert len(timesteps.size()) == 1
     timesteps = timesteps.to(torch.get_default_dtype())
     device = timesteps.device

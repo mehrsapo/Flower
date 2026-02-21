@@ -5,7 +5,7 @@ val_dir="./data/afhq_cat/val/cat"
 # Directory where the validation list file is saved
 output_dir="./data/afhq_cat"
 # File containing the names of the selected images
-val_list_file="splits/afhq_cat/validation_images.txt"
+val_list_file="./data/splits/afhq_cat/validation_images.txt"
 
 # Ensure the destination directory exists
 mkdir -p "$val_dir"

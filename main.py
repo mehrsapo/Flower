@@ -17,13 +17,16 @@ from pnpflow.methods.ot_ode import OT_ODE
 from pnpflow.methods.flow_priors import FLOW_PRIORS
 from pnpflow.methods.pnp_gs import PROX_PNP
 from pnpflow.methods.pnp_diff import PNP_DIFF
+from pnpflow.methods.flower import FLOWER
+from pnpflow.methods.flower_cov import FLOWER_COV
+
 from pnpflow.utils import gaussian_blur, define_model, load_model
 import warnings
 warnings.filterwarnings("ignore", module="matplotlib\\..*")
 
 torch.cuda.empty_cache()
-os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+#os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
+#os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3'
 
 
 def parse_args() -> argparse.Namespace:
@@ -58,7 +61,7 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = args.device # torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("device", device)
 
     if args.seed is not None:
@@ -74,7 +77,7 @@ def main():
         print('Training...')
         data_loaders = DataLoaders(
             args.dataset, args.batch_size_train, args.batch_size_train).load_data()
-        if args.model == "ot":
+        if args.model == "ot" or args.model == "flow_indp":
             generative_method = FLOW_MATCHING(model, device, args)
         elif args.model == "gradient_step":
             generative_method = GRADIENT_STEP_DENOISER(model, device, args)
@@ -93,9 +96,17 @@ def main():
             load_model(args.model, model, state, download=False,
                        checkpoint_path=model_path, dataset=None,  device=device)
             model.eval()
+        
+        if args.model == "flow_indp":
+            model_path = args.root + \
+                'model/{}/{}/model_final_no_ot.pt'.format(
+                    args.dataset, 'ot')
+            load_model('ot', model, state, download=False,
+                       checkpoint_path=model_path, dataset=None,  device=device)
+            model.eval()
 
         elif args.model == "rectified":
-            model_path = args.root + 'model/{}/{}/model_final.pth'.format(
+            model_path = args.root + 'model/{}/{}/model_final_no_ot.pth'.format(
                 args.dataset, args.model)
             load_model(args.model, model, state, download=False,
                        checkpoint_path=model_path, dataset=None, device=device)
@@ -196,6 +207,10 @@ def main():
 
         if args.method == 'pnp_flow':
             method = PNP_FLOW(model, device, args)
+        elif args.method == 'flower':
+            method = FLOWER(model, device, args)
+        elif args.method == 'flower_cov':
+            method = FLOWER_COV(model, device, args)
         elif args.method == 'd_flow':
             method = D_FLOW(model, device, args)
         elif args.method == 'ot_ode':

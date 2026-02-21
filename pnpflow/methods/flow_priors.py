@@ -133,8 +133,7 @@ class FLOW_PRIORS(object):
                         optim_img.zero_grad()
                         grad = torch.autograd.grad(
                             loss, x, create_graph=False)[0]
-                        #grad_xt_lik = - 1 / (1-num_t) * (-x + num_t * pred)
-                        grad_xt_lik = (- 1.0 / (1.0 - num_t) * (-x + num_t * pred.detach())).detach()
+                        grad_xt_lik = - 1 / (1-num_t) * (-x + num_t * pred)
                         x.grad = grad + grad_xt_lik
                         optim_img.step()
 
@@ -145,17 +144,17 @@ class FLOW_PRIORS(object):
                     time_counter_2 = perf_counter()
                     time_per_batch += time_counter_2 - time_counter_1
 
-                # if iteration % 20 == 0 and self.args.save_results:
-                #     restored_img = x.detach().clone()  # / (delta * iteration)
-                #     # utils.save_images(
-                #     #         clean_img, noisy_img, restored_img, self.args, H_adj, iter=iteration)
-                #     utils.compute_psnr(clean_img, noisy_img,
-                #                        restored_img, self.args, H_adj, iter=iteration)
-                #     utils.compute_ssim(clean_img, noisy_img,
-                #                        restored_img, self.args, H_adj, iter=iteration)
-                #     utils.compute_lpips(clean_img, noisy_img,
-                #                         restored_img, self.args, H_adj, iter=iteration)
-                #     del restored_img
+                '''if iteration % 20 == 0 and self.args.save_results:
+                    restored_img = x.detach().clone()  # / (delta * iteration)
+                    # utils.save_images(
+                    #         clean_img, noisy_img, restored_img, self.args, H_adj, iter=iteration)
+                    utils.compute_psnr(clean_img, noisy_img,
+                                       restored_img, self.args, H_adj, iter=iteration)
+                    utils.compute_ssim(clean_img, noisy_img,
+                                       restored_img, self.args, H_adj, iter=iteration)
+                    utils.compute_lpips(clean_img, noisy_img,
+                                        restored_img, self.args, H_adj, iter=iteration)
+                    del restored_img'''
                 torch.cuda.empty_cache()
 
             if self.args.compute_memory:

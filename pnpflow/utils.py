@@ -16,7 +16,7 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 import torchvision.transforms as v2
 import argparse
-from torchmetrics.functional.image import peak_signal_noise_ratio as PSNR
+from skimage.metrics import peak_signal_noise_ratio as PSNR
 from ignite.metrics import SSIM
 from collections import defaultdict
 import math
@@ -168,7 +168,7 @@ def merge_cfg_from_list(cfg: CfgNode,
 
 
 def define_model(args):
-    if args.model == "ot" or args.model == "gradient_step":
+    if args.model == "ot" or args.model=='flow_indp' or args.model == "gradient_step":
         model = UNet(input_channels=args.num_channels,
                      input_height=args.dim_image,
                      ch=32,
@@ -443,10 +443,10 @@ def save_images(clean_img, noisy_img, rec_img, args, H_adj, iter='final'):
     cols = int(math.sqrt(batch_size))  # Number of columns
     rows = int(batch_size / cols)   # Number of rows
 
-    clean_img = clean_img.permute(0, 2, 3, 1).cpu().data
-    noisy_img = noisy_img.permute(0, 2, 3, 1).cpu().data
-    rec_img = rec_img.permute(0, 2, 3, 1).cpu().data
-    H_adj_noisy_img = H_adj_noisy_img.permute(0, 2, 3, 1).cpu().data
+    clean_img = clean_img.permute(0, 2, 3, 1).cpu().data.numpy()
+    noisy_img = noisy_img.permute(0, 2, 3, 1).cpu().data.numpy()
+    rec_img = rec_img.permute(0, 2, 3, 1).cpu().data.numpy()
+    H_adj_noisy_img = H_adj_noisy_img.permute(0, 2, 3, 1).cpu().data.numpy()
 
     if iter != 'final':
         if batch_size == 1:
@@ -454,8 +454,8 @@ def save_images(clean_img, noisy_img, rec_img, args, H_adj, iter='final'):
             plt.imshow(rec_img[0])
         elif batch_size == 2:
             fig, ax = plt.subplots(1, 2)
-            ax[0].imshow(rec_img[0].numpy())
-            ax[1].imshow(rec_img[1].numpy())
+            ax[0].imshow(rec_img[0])
+            ax[1].imshow(rec_img[1])
             for ax_ in ax.flatten():
                 ax_.set_xticks([])
                 ax_.set_yticks([])
@@ -464,10 +464,10 @@ def save_images(clean_img, noisy_img, rec_img, args, H_adj, iter='final'):
             for i in range(rows):
                 for j in range(cols):
                     if args.num_channels == 1:
-                        ax[i, j].imshow(rec_img[i + j * rows].squeeze(-1).numpy(),
+                        ax[i, j].imshow(rec_img[i + j * rows].squeeze(-1),
                                         cmap='gray', vmin=0, vmax=1)
                     else:
-                        ax[i, j].imshow(rec_img[i + j * rows].numpy())
+                        ax[i, j].imshow(rec_img[i + j * rows])
 
             for ax_ in ax.flatten():
                 ax_.set_xticks([])
@@ -483,20 +483,20 @@ def save_images(clean_img, noisy_img, rec_img, args, H_adj, iter='final'):
 
             if batch_size == 1:
                 fig = plt.figure()
-                plt.imshow(img[0].numpy())
+                plt.imshow(img[0])
             elif batch_size == 2:
                 fig, ax = plt.subplots(1, 2)
-                ax[0].imshow(img[0].numpy())
-                ax[1].imshow(img[1].numpy())
+                ax[0].imshow(img[0])
+                ax[1].imshow(img[1])
             else:
                 fig, ax = plt.subplots(rows, cols, figsize=(20, 20))
                 for i in range(rows):
                     for j in range(cols):
                         if args.num_channels == 1:
-                            ax[i, j].imshow(img[i + j * rows].squeeze(-1).numpy(),
+                            ax[i, j].imshow(img[i + j * rows].squeeze(-1),
                                             cmap='gray', vmin=0, vmax=1)
                         else:
-                            ax[i, j].imshow(img[i + j * rows].numpy())
+                            ax[i, j].imshow(img[i + j * rows])
 
                 for ax_ in ax.flatten():
                     ax_.set_xticks([])
@@ -567,7 +567,7 @@ def postprocess(img, args):
             config = get_config_afhq_cat()
             # inverse_scaler = datasets.get_data_inverse_scaler(config)
         img = (img + 1.) / 2.
-    if args.model == "ot" or args.model == "gradient_step" or args.model == "diffusion":
+    if args.model == "ot" or  args.model == "flow_indp" or args.model == "gradient_step" or args.model == "diffusion":
         if args.dataset == "afhq_cat":
             img = (img + 1) / 2
         else:
@@ -591,6 +591,24 @@ def save_time_use(dict_mem,  args):
         f.write(str(dict_mem) + '\n')
 
 
+def compute_psnr_func(clean_img, rec_img, args):
+
+    # Ensure images are in the appropriate range and format for PSNR calculation
+    clean_img = postprocess(clean_img.clone(), args)
+    rec_img = postprocess(rec_img.clone(), args)
+
+    clean_img = clean_img.permute(0, 2, 3, 1).cpu().data.numpy()
+
+    rec_img = rec_img.permute(0, 2, 3, 1).cpu().data.numpy()
+
+    # Compute PSNR values
+    B = clean_img.shape[0]
+    psnr_rec_each = [PSNR(clean_img[i], rec_img[i],   data_range=1.0) for i in range(B)]
+
+    psnr_rec = float(np.mean(psnr_rec_each))
+    return psnr_rec
+
+
 def compute_psnr(clean_img, noisy_img, rec_img, args, H_adj, iter='final'):
 
     # Ensure images are in the appropriate range and format for PSNR calculation
@@ -599,16 +617,21 @@ def compute_psnr(clean_img, noisy_img, rec_img, args, H_adj, iter='final'):
     rec_img = postprocess(rec_img.clone(), args)
     H_adj_noisy_img = postprocess(H_adj(noisy_img), args)
 
-    clean_img = clean_img.permute(0, 2, 3, 1).cpu().data
+    clean_img = clean_img.permute(0, 2, 3, 1).cpu().data.numpy()
     if args.problem == 'superresolution' or args.problem == 'superresolution_bicubic':
-        noisy_img = H_adj_noisy_img.permute(0, 2, 3, 1).cpu().data
+        noisy_img = H_adj_noisy_img.permute(0, 2, 3, 1).cpu().data.numpy()
     else:
-        noisy_img = noisy_img.permute(0, 2, 3, 1).cpu().data
-    rec_img = rec_img.permute(0, 2, 3, 1).cpu().data
+        noisy_img = noisy_img.permute(0, 2, 3, 1).cpu().data.numpy()
+    rec_img = rec_img.permute(0, 2, 3, 1).cpu().data.numpy()
 
     # Compute PSNR values
-    psnr_rec = PSNR(rec_img, clean_img,  data_range=1.0, dim=(1, 2, 3))
-    psnr_noisy = PSNR(noisy_img, clean_img, data_range=1.0,  dim=(1, 2, 3))
+    B = clean_img.shape[0]
+    psnr_rec_each = [PSNR(clean_img[i], rec_img[i],   data_range=1.0) for i in range(B)]
+    psnr_noisy_each = [PSNR(clean_img[i], noisy_img[i], data_range=1.0) for i in range(B)]
+
+    psnr_rec = float(np.mean(psnr_rec_each))
+    psnr_noisy = float(np.mean(psnr_noisy_each))
+
 
     # Save PSNR restored values
     rec_filename = os.path.join(
@@ -672,6 +695,34 @@ def compute_average_psnr(args):
         for value in args.dict_cfg_method.values():
             file.write(f'{value} ')
         file.write('\n')
+
+def compute_lpips_func(clean_img, rec_img, args):
+
+    # Download the LPIPS model if it is not already available
+    DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    # Path where LPIPS usually stores models (default cache directory)
+    lpips_model_path = os.path.expanduser('~/.cache/torch/hub/checkpoints/')
+    if not os.path.exists(lpips_model_path) or not any(fname.startswith('alex') for fname in os.listdir(lpips_model_path)):
+        print("Downloading LPIPS model for the first time...")
+    loss_fn_alex = lpips.LPIPS(net='alex').to(DEVICE)
+
+    # Ensure images are in the appropriate range and format for LPIPS calculation
+    clean_img = postprocess(clean_img.clone(), args)
+    rec_img = postprocess(rec_img.clone(), args)
+
+    # Permute images to NCHW format and move to the correct device
+    clean_img = clean_img.to(DEVICE)
+    rec_img = rec_img.to(DEVICE)
+
+
+    # Ensure images are in the expected format (N, C, H, W) and range [-1, 1] for LPIPS
+    clean_img = 2 * clean_img - 1
+    rec_img = 2 * rec_img - 1
+
+    # Compute LPIPS values
+    lpips_rec = loss_fn_alex(clean_img, rec_img, normalize=True).mean().item()
+    
+    return lpips_rec
 
 
 def compute_lpips(clean_img, noisy_img, rec_img, args, H_adj, iter='final'):
@@ -777,6 +828,30 @@ def compute_average_lpips(args):
         file.write('\n')
 
 
+def compute_ssim_func(clean_img, rec_img, args):
+    # Ensure images are in the appropriate range and format for SSIM calculation
+    clean_img = postprocess(clean_img.clone(), args).cpu()
+    rec_img = postprocess(rec_img.clone(), args).cpu()
+
+    # Convert images to the appropriate format for SSIM calculation
+
+    # Initialize SSIM metric for restored and noisy images
+    ssim_metric = SSIM(data_range=1.0)
+    ssim_metric_noisy = SSIM(data_range=1.0)
+
+    # Compute SSIM values
+    ssim_rec_each = []
+
+    for i in range(clean_img.shape[0]):
+        ssim_metric.update((rec_img[i:i+1], clean_img[i:i+1]))
+        ssim_rec = ssim_metric.compute()
+        ssim_rec_each.append(ssim_rec)
+
+    # Averages
+    ssim_rec = float(np.mean(ssim_rec_each))
+    
+    return ssim_rec
+
 def compute_ssim(clean_img, noisy_img, rec_img, args, H_adj, iter='final'):
     # Ensure images are in the appropriate range and format for SSIM calculation
     H_adj_noisy_img = postprocess(
@@ -796,10 +871,21 @@ def compute_ssim(clean_img, noisy_img, rec_img, args, H_adj, iter='final'):
     ssim_metric_noisy = SSIM(data_range=1.0)
 
     # Compute SSIM values
-    ssim_metric.update((rec_img, clean_img))
-    ssim_rec = ssim_metric.compute()
-    ssim_metric_noisy.update((noisy_img, clean_img))
-    ssim_noisy = ssim_metric_noisy.compute()
+    ssim_rec_each = []
+    ssim_noisy_each = []
+    for i in range(clean_img.shape[0]):
+        ssim_metric.update((rec_img[i:i+1], clean_img[i:i+1]))
+        ssim_rec = ssim_metric.compute()
+        ssim_metric_noisy.update((noisy_img[i:i+1], clean_img[i:i+1]))
+        ssim_noisy = ssim_metric_noisy.compute()
+        ssim_rec_each.append(ssim_rec)
+        ssim_noisy_each.append(ssim_noisy)
+
+    
+
+    # Averages
+    ssim_rec = float(np.mean(ssim_rec_each))
+    ssim_noisy = float(np.mean(ssim_noisy_each))
 
     # Save SSIM restored values
     rec_filename = os.path.join(

@@ -20,19 +20,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 import ot
 from torchdiffeq import odeint_adjoint as odeint
+from pnpflow.models import InceptionV3
 import pnpflow.fid_score as fs
 from pnpflow.dataloaders import DataLoaders
 import pnpflow.utils as utils
-from fld.metrics.FID import FID
-from fld.features.InceptionFeatureExtractor import InceptionFeatureExtractor
-from pnpflow.dataloaders import CelebADataset, AFHQDataset
-from torchvision import transforms
-from torchvision.utils import save_image
-
-
-img_dir_celeba = './data/celeba/img_align_celeba/'
-partition_csv_celeba = './data/celeba/list_eval_partition.csv'
-img_dir_afhq = '.data/afhq_cat/test/cat/'
 
 
 class FLOW_MATCHING(object):
@@ -46,27 +37,11 @@ class FLOW_MATCHING(object):
         self.model = model.to(device)
 
     def train_FM_model(self, train_loader, opt, num_epoch):
-
-        ft_extractor = InceptionFeatureExtractor(save_path="features")
-        if self.args.dataset == "celeba":
-            test_feat = ft_extractor.get_features(CelebADataset(
-                img_dir_celeba, partition_csv_celeba, partition=2, transform=transforms.Compose([transforms.CenterCrop(178), transforms.Resize([self.args.dim_image, self.args.dim_image]),])), name=f"celeba{self.args.dim_image}_test")
-        elif self.args.dataset == "afhq_cat":
-            test_feat = AFHQDataset(
-                img_dir_afhq, batchsize=self.batch_size_test, transform = transforms.Compose([transforms.Resize((256, 256)),
-                transforms.ToTensor()]))
-        else:
-            raise ValueError(f"Unknown dataset {self.args.dataset}")
-            
-
         tq = tqdm(range(num_epoch), desc='loss')
         for ep in tq:
             for iteration, (x, labels) in enumerate(train_loader):
                 if x.size(0) == 0:
                     continue
-                if iteration > 20:
-                    break
-                print(f'Epoch: {ep}, iter: {iteration}')
                 x = x.to(self.device)
                 z = torch.randn(
                     x.shape[0],
@@ -81,7 +56,8 @@ class FLOW_MATCHING(object):
                 # compute coupling
                 x0 = z.clone()
                 x1 = x.clone()
-                a, b = np.ones(len(x0)) / len(x0), np.ones(len(x0)) / len(x0)
+                # Uncomment the following lines to use optimal transport coupling instead of random coupling
+                '''a, b = np.ones(len(x0)) / len(x0), np.ones(len(x0)) / len(x0)
 
                 M = ot.dist(x0.view(len(x0), -1).cpu().data.numpy(),
                             x1.view(len(x1), -1).cpu().data.numpy())
@@ -92,7 +68,7 @@ class FLOW_MATCHING(object):
                     plan.shape[0] * plan.shape[1], p=p, size=len(x0), replace=True)
                 i, j = np.divmod(choices, plan.shape[1])
                 x0 = x0[i]
-                x1 = x1[j]
+                x1 = x1[j]'''
                 xt = t1 * x1 + (1 - t1) * x0
                 loss = torch.sum(
                     (self.model(xt, t1.squeeze()) - (x1 - x0))**2) / x.shape[0]
@@ -112,12 +88,8 @@ class FLOW_MATCHING(object):
                 torch.save(self.model.state_dict(),
                            self.model_path + 'model_{}.pt'.format(ep))
                 # evaluate FID
-                print("Computing FID 5K")
-                num_gen = 5_000
-                fid_value = self.compute_fid(num_gen, test_feat,
-                                        ft_extractor, batch_size=124, integration_method="euler", integration_steps=10)
-
-                with open(self.save_path + f'FID_{(num_gen // 1000)}k.txt', 'a') as file:
+                fid_value = self.compute_fast_fid(2048)
+                with open(self.save_path + 'fid.txt', 'a') as file:
                     file.write(f'Epoch: {ep}, FID: {fid_value}\n')
 
     def apply_flow_matching(self, NO_samples):
@@ -148,7 +120,6 @@ class FLOW_MATCHING(object):
             pass
 
         reco = utils.postprocess(self.apply_flow_matching(16), self.args)
-        reco = utils.postprocess(reco, self.args)
         utils.save_samples(reco.detach().cpu(), x[:16].cpu(), self.save_path + 'results_samplings/' +
                            'samplings_ep_{}.pdf'.format(ep), self.args)
 
@@ -159,51 +130,32 @@ class FLOW_MATCHING(object):
             utils.save_samples(gt.detach().cpu(), gt.detach().cpu(), self.save_path + 'results_samplings/' +
                                'train_samples_ep_{}.pdf'.format(ep), self.args)
 
-    def generate_samples(self, integration_method="dopri5", tol=1e-5,
-                         n_samples=1028, batch_size=None, num_channels=3,
-                         integration_steps=100, tmax=1):
-        """
-        Return a tensor of size (TODO).
-        """
+    def compute_fast_fid(self, num_samples):
+        block_idx = InceptionV3.BLOCK_INDEX_BY_DIM[2048]
+        model = InceptionV3([block_idx]).to(self.device)
+        data_v = next(iter(self.full_train_set))
+        gt = data_v[0].to(self.device)[:num_samples]
+        gt = gt.permute(0, 2, 3, 1).cpu().numpy()
+        if gt.shape[-1] == 1:
+            gt = np.concatenate([gt, gt, gt], axis=-1)
+        gt = np.transpose(gt, axes=(0, 3, 1, 2))
+        batch_size = 50
+        m1, s1 = fs.calculate_activation_statistics(
+            gt, model, batch_size, 2048, self.device)
 
-        if batch_size is None:
-            batch_size = n_samples
-
-        images_list = []
-        batches = [batch_size] * (n_samples // batch_size)
-        if n_samples % batch_size:
-            batches += [n_samples % batch_size]
-
-        with torch.no_grad():
-            for k, batch in enumerate(tqdm(batches)):
-                time_points = torch.linspace(
-                    0, tmax, int(tmax * integration_steps), device=self.device)
-
-                x0 = torch.randn(batch, num_channels, self.d,
-                                 self.d, device=self.device)
-                model_class = cnf(self.model)
-                traj = odeint(model_class, x0, time_points, rtol=tol, atol=tol,
-                    method=integration_method)
-                images_list.append(traj[-1, :])
-
-        images = torch.cat(images_list, dim=0)
-        return images
-    
-    def compute_fid(self, num_images_fid, train_feat, ft_extractor, batch_size=512, integration_method="dopri5", integration_steps=100,  epoch='final'):
-        gen_images = self.generate_samples(integration_method=integration_method, tol=1e-4,
-                                           n_samples=num_images_fid, batch_size=batch_size, integration_steps=integration_steps)
-        rescaled_imgs = (gen_images * 127.5 + 128).clip(0, 255).to(torch.uint8)
-        gen_feat = ft_extractor.get_tensor_features(
-            rescaled_imgs)
-
-        fid_val = FID().compute_metric(
-            train_feat, None, gen_feat)
-
-        # save the 16 first generated images in a grid
-        os.makedirs(f"training_images/{self.args.dataset}", exist_ok=True)
-        images = gen_images[:16]
-        save_image(images, f"training_images/{self.args.dataset}/gen_images_epoch{epoch}.png")
-        return fid_val
+        samples = torch.empty(0).to(self.device)
+        n_iter = 50
+        for i in range(n_iter):
+            samples = torch.cat([samples.cpu(), self.apply_flow_matching(
+                num_samples // n_iter).cpu()], dim=0)
+        gen = torch.clip(samples.permute(0, 2, 3, 1), 0, 1).cpu().numpy()
+        if gen.shape[-1] == 1:
+            gen = np.concatenate([gen, gen, gen], axis=-1)
+        gen = np.transpose(gen, axes=(0, 3, 1, 2))
+        m2, s2 = fs.calculate_activation_statistics(
+            gen, model, batch_size, 2048, self.device)
+        fid_value = fs.calculate_frechet_distance(m1, s1, m2, s2)
+        return fid_value
 
     def train(self, data_loaders):
 
@@ -226,6 +178,10 @@ class FLOW_MATCHING(object):
         # load model
         train_loader = data_loaders['train']
 
+        # load full dataset on cpu to evaluate FID
+        full_data = DataLoaders(self.args.dataset, 2048, 2048)
+        self.full_train_set = full_data.load_data()['train']
+
         # create txt file for storing all information about model
         with open(self.save_path + 'model_info.txt', 'w') as file:
             file.write(f'PARAMETERS\n')
@@ -240,7 +196,7 @@ class FLOW_MATCHING(object):
         self.train_FM_model(train_loader, opt, num_epoch=self.args.num_epoch)
 
         # save final model
-        torch.save(self.model.state_dict(), self.model_path + 'model_final.pt')
+        torch.save(self.model.state_dict(), self.model_path + 'model_final_no_ot.pt')
 
 
 class cnf(torch.nn.Module):
@@ -254,5 +210,3 @@ class cnf(torch.nn.Module):
             # z = self.model(x, t.squeeze())
             z = self.model(x, t.repeat(x.shape[0]))
         return z
-
-

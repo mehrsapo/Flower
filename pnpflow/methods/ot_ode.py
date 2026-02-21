@@ -100,8 +100,9 @@ class OT_ODE(object):
                         h_h_adj = torch.matmul(diag, diag.T)
                         sol_tmp = 1 / (torch.diag(h_h_adj) * rt_squared +
                                        torch.tensor(sigma_noise)**2)
-
-                        sol_tmp = sol_tmp[None, None, :] * \
+                        
+                       # print(sol_tmp.device, d.device)
+                        sol_tmp = sol_tmp[None, None, :].to(d.device) * \
                             d.flatten(start_dim=2)
                         sol = sol_tmp.reshape(d.shape)
 
@@ -146,17 +147,17 @@ class OT_ODE(object):
 
                     x = x_new
 
-                    if self.args.save_results:
+                    '''if self.args.save_results:
                         if iteration % 10 == 0 or self.should_save_image(iteration, steps):
                             restored_img = x.detach().clone()
-                            # utils.save_images(
-                            #     clean_img, noisy_img, restored_img, self.args, H_adj, iter=iteration)
-                            utils.compute_psnr(clean_img, noisy_img,
-                                               restored_img, self.args, H_adj, iter=iteration)
-                            utils.compute_ssim(clean_img, noisy_img,
-                                               restored_img, self.args, H_adj, iter=iteration)
-                            utils.compute_lpips(clean_img, noisy_img,
-                                                restored_img, self.args, H_adj, iter=iteration)
+                    # utils.save_images(
+                    #     clean_img, noisy_img, restored_img, self.args, H_adj, iter=iteration)
+                    utils.compute_psnr(clean_img, noisy_img,
+                                       restored_img, self.args, H_adj, iter=iteration)
+                    utils.compute_ssim(clean_img, noisy_img,
+                                       restored_img, self.args, H_adj, iter=iteration)
+                    utils.compute_lpips(clean_img, noisy_img,
+                                        restored_img, self.args, H_adj, iter=iteration)'''
 
                     if self.args.compute_time:
                         torch.cuda.synchronize()
