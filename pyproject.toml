@@ -21,6 +21,7 @@ authors = [
 license = {text = "MIT"}
 
 # 5. Add any NEW libraries your method uses to this list!
+# Note: torch and torchvision are managed by the conda environment (environment.yml)
 dependencies = [
     "deepinv",
     "gdown",
@@ -30,8 +31,6 @@ dependencies = [
     "ninja",
     "opencv-python",
     "pytorch-ignite",
-    "torch",
-    "torchvision",
     "torchdiffeq",
     "torchmetrics",
     "pandas",

@@ -12,12 +12,15 @@ Flower consists of three main steps.
 <img src="flower_demo/batch001_grid.png" scale=0.6/>
 
 ## 1. Getting started
-To get started, clone and install the repository with:
+To get started, clone the repository and create the conda environment:
 
-```
+```bash
 cd Flower
-pip install -e .
+conda env create -f environment.yml
+conda activate flower
 ```
+
+This will install all dependencies and the package in editable mode. The environment uses Python 3.10 with PyTorch installed via conda (CUDA 12.1 by default — edit `environment.yml` to match your CUDA version, or replace `pytorch-cuda=12.1` with `cpuonly` for a CPU-only setup).
 
 ### 1.1. Download datasets
 

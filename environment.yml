@@ -1,0 +1,31 @@
+name: flower
+
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pytorch
+  - torchvision
+  - pytorch-cuda=12.1  # change to match your CUDA version, or use cpuonly for CPU-only
+  - pip
+
+  - pip:
+    - deepinv
+    - gdown
+    - kaggle
+    - lpips
+    - ml_collections
+    - ninja
+    - opencv-python
+    - pytorch-ignite
+    - torchdiffeq
+    - torchmetrics
+    - pandas
+    - POT
+    - scikit-image
+    - wget
+    - -e .
