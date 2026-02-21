@@ -1,6 +1,7 @@
 # FLOWER: A Flow Matching Solver for Inverse Problems
 [![arXiv](https://img.shields.io/badge/arXiv-2509.26287-b31b1b.svg)](https://arxiv.org/abs/2509.26287)
 [![OpenReview](https://img.shields.io/badge/OpenReview-ICLR_2026-blue.svg)](https://openreview.net/forum?id=QGd34p02mI)
+[![Project Page](https://img.shields.io/badge/Project%20Page-Online-green.svg)](https://mehrsapo.github.io/Flower/)
 
 This GitHub repository contains the code for our ICLR 2026 FLOWER [paper](https://openreview.net/forum?id=QGd34p02mI), a method that aims to solve inverse problems with pretrained flow matching models through a Bayesian viewpoint.
 
