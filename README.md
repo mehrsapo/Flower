@@ -35,8 +35,6 @@ To download all the pretrained model weights, run the command:
 bash download_models.sh
 ```
 
-
-
 ## 3. Solving inverse problems
 
 The available inverse problems are:
