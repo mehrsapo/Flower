@@ -59,7 +59,7 @@ The available methods are
 
 ### 3.2. Reproduction of paper results
 
-Use the bash files ```scripts/``.
+Use the bash files ```scripts/```.
 
 Visual results will be saved in ```results/``` folder. 
 
