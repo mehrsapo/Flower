@@ -12,33 +12,33 @@ Flower consists of three main steps.
 <img src="flower_demo/batch001_grid.png" scale=0.6/>
 
 ## 1. Getting started
-To get started, clone and install the repository with 
+To get started, clone and install the repository with:
 
 ```
 cd Flower
 pip install -e .
 ```
 
-### 1.2. Download datasets 
+### 1.1. Download datasets
 
-To download the [CelebA](https://www.kaggle.com/datasets/jessicali9530/celeba-dataset) and [AFHQ-CAT](https://github.com/clovaai/stargan-v2/blob/master/README.md#animal-faces-hq-dataset-afhq) datasets, run the command:
+To download the [CelebA](https://www.kaggle.com/datasets/jessicali9530/celeba-dataset) and [AFHQ-Cat](https://github.com/clovaai/stargan-v2/blob/master/README.md#animal-faces-hq-dataset-afhq) datasets, run the command:
 ```bash
 bash download_data.sh
 ```
-Note that as the dataset AFHQ-Cat doesn't have a test split, we create one when downloading the dataset. 
+Note that since the AFHQ-Cat dataset does not have a test split, we create one when downloading the dataset.
 
-### 1.2. Download pretrained models 
+### 1.2. Download pretrained models
 
-To download all the pretrained model weights, run the command: 
+To download all the pretrained model weights, run the command:
 
 ```bash
 bash download_models.sh
 ```
 
-## 3. Reproduction of paper results for solving inverse problems
-Use the bash files in the ```scripts/``` folder.
+## 2. Reproduction of paper results for solving inverse problems
+Use the bash scripts in the ```scripts/``` folder.
 
-Visual and numerical results will be saved in ```results/``` folder. 
+Visual and numerical results will be saved in the ```results/``` folder.
 
 The available methods are
 - ```flower``` (our method default with $\gamma = 0$)
@@ -50,7 +50,7 @@ The available methods are
 - ```pnp_diff``` (from this [paper](https://openaccess.thecvf.com/content/CVPR2023W/NTIRE/papers/Zhu_Denoising_Diffusion_Models_for_Plug-and-Play_Image_Restoration_CVPRW_2023_paper.pdf))
 - ```pnp_gs``` (from this [paper](https://openreview.net/pdf?id=fPhKeld3Okz))
 
-Note ```flower``` and  ```flower_cov``` support two modes for the pretrained flow model: 1.  ```ot```: with optimal transport coupling (used for comparisons) and  ```flow_indp``` which is with no optimal transport coupling in training. Read the paper for more details
+Note that ```flower``` and ```flower_cov``` support two modes for the pretrained flow model: 1. ```ot```: with optimal transport coupling (used for comparisons), and 2. ```flow_indp```: with no optimal transport coupling during training. Read the paper for more details.
 
 The available inverse problems are:
 - Denoising --> set ```problem: 'denoising'```
@@ -61,10 +61,10 @@ The available inverse problems are:
 
 ## Acknowledgements
 This repository builds upon the following publicly available codes:
-- [PnP-Flow](https://arxiv.org/abs/2410.02423) available at https://github.com/annegnx/PnP-Flow. 
-which builds upons: 
+- [PnP-Flow](https://arxiv.org/abs/2410.02423) available at https://github.com/annegnx/PnP-Flow,
+which builds upon:
 - [PnP-GS](https://openreview.net/pdf?id=fPhKeld3Okz) available at https://github.com/samuro95/GSPnP
 - [DiffPIR](https://openaccess.thecvf.com/content/CVPR2023W/NTIRE/papers/Zhu_Denoising_Diffusion_Models_for_Plug-and-Play_Image_Restoration_CVPRW_2023_paper.pdf) from the [DeepInv](https://deepinv.github.io/deepinv/stubs/deepinv.sampling.DiffPIR.html#deepinv.sampling.DiffPIR) library
-- The folder ImageGeneration is copied from [Rectified Flow](https://github.com/gnobitab/RectifiedFlow) repository.
-- We thank Anne Gagneux and Segolene Martin for their assistance in reproducing pnp-flow results. 
+- The folder ImageGeneration is copied from the [Rectified Flow](https://github.com/gnobitab/RectifiedFlow) repository.
+- We thank Anne Gagneux and Ségolène Martin for their assistance in reproducing PnP-Flow results.
 
