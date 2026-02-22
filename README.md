@@ -117,7 +117,7 @@ The available inverse problems are:
 
   ```
   @inproceedings{pourya2026flower,
-    title={{Flower}: A Flow-Matching Solver for Inverse Problems},
+    title={Flower: A Flow-Matching Solver for Inverse Problems},
     author={Mehrsa Pourya and Bassam El Rawas and Michael Unser},
     booktitle={The Fourteenth International Conference on Learning Representations},
     year={2026},
