@@ -3,9 +3,7 @@
 [![OpenReview](https://img.shields.io/badge/OpenReview-ICLR_2026-blue.svg)](https://openreview.net/forum?id=QGd34p02mI)
 [![Project Page](https://img.shields.io/badge/Project%20Page-Online-green.svg)](https://mehrsapo.github.io/Flower/)
 
-This GitHub repository contains the code for our ICLR 2026 Flower [paper](https://openreview.net/forum?id=QGd34p02mI), a method that aims to solve inverse problems with pretrained flow matching models through a Bayesian viewpoint.
-
-Flower consists of three main steps. 
+This GitHub repository contains the code for our ICLR 2026 Flower [paper](https://openreview.net/forum?id=QGd34p02mI), a method that aims to solve inverse problems with pretrained flow matching models through a Bayesian viewpoint. Flower consists of three main steps. 
 - Destination Estimation 
 - Destination Refinement
 - Time Progression 
