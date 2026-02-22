@@ -1,4 +1,4 @@
-# 🌸 FLOWER: A Flow Matching Solver for Inverse Problems
+# 🌸 Flower: A Flow Matching Solver for Inverse Problems
 [![arXiv](https://img.shields.io/badge/arXiv-2509.26287-b31b1b.svg)](https://arxiv.org/abs/2509.26287)
 [![OpenReview](https://img.shields.io/badge/OpenReview-ICLR_2026-blue.svg)](https://openreview.net/forum?id=QGd34p02mI)
 [![Project Page](https://img.shields.io/badge/Project%20Page-Online-green.svg)](https://mehrsapo.github.io/Flower/)
@@ -119,7 +119,7 @@ The available inverse problems are:
 
   ```
   @inproceedings{pourya2026flower,
-    title={{FLOWER}: A Flow-Matching Solver for Inverse Problems},
+    title={{Flower}: A Flow-Matching Solver for Inverse Problems},
     author={Mehrsa Pourya and Bassam El Rawas and Michael Unser},
     booktitle={The Fourteenth International Conference on Learning Representations},
     year={2026},
