@@ -1,5 +1,0 @@
-config
-demo
-pnpflow
-scripts
-splits
