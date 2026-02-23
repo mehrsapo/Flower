@@ -15,6 +15,7 @@ demo/iter*.png
 *.pyc
 */__pycache__/*
 /flower.egg-info/*
+/pnpflow.egg-info/*
 *.pt
 
 build/
