@@ -8,7 +8,7 @@ This GitHub repository contains the code for our ICLR 2026 Flower [paper](https:
 - Destination Refinement
 - Time Progression 
 
-which jointly jointly approximate posterior sampling and solve linear inverse problems.
+which jointly jointly approximate posterior sampling and solve linear inverse problems. Read the paper for more details! 
 
 <img src="flower_demo/flower_steps.png" scale=0.8/>
 
